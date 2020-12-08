@@ -151,14 +151,13 @@ public class ClienteServiceTest {
         when(clienteRepository.findById(anyLong())).thenReturn(Optional.of(cliente));
 
         cliente.setNome(clienteDTO.getNome());
-        when(clienteRepository.findByNome(anyString())).thenReturn(Optional.of(cliente));
+        when(clienteRepository.save(cliente)).thenReturn(cliente);
 
         ClienteDTO clienteDTORetornado = clienteService.updateNomeById(cliente.getId(), "Elvis de Sousa da Guarda");
 
         verify(modelMapper, atLeastOnce()).map(cliente, ClienteDTO.class);
         verify(clienteRepository, atLeastOnce()).findById(anyLong());
-        verify(clienteRepository, atLeastOnce()).findByNome(anyString());
-        verify(clienteRepository, atLeastOnce()).updateNomeById(anyLong(), anyString());
+        verify(clienteRepository, atLeastOnce()).save(any());
 
         assertThat(clienteDTORetornado, equalTo(clienteDTO));
         assertThat(clienteDTORetornado.getNome(), equalTo(clienteDTO.getNome()));
@@ -177,7 +176,7 @@ public class ClienteServiceTest {
         verify(modelMapper, never()).map(cliente, ClienteDTO.class);
         verify(clienteRepository, atLeastOnce()).findById(anyLong());
         verify(clienteRepository, never()).findByNome(anyString());
-        verify(clienteRepository, never()).updateNomeById(anyLong(), anyString());
+        verify(clienteRepository, never()).save(any());
     }
 
     @Test

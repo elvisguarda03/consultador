@@ -41,12 +41,12 @@ public class ClienteService {
         return convertClienteToClienteDTO(cliente);
     }
 
+    @Transactional
     public ClienteDTO updateNomeById(Long id, String nome) {
         Cliente cliente = clienteRepository.findById(id).orElseThrow(thrownResourceNotFound());
+        cliente.setNome(nome);
 
-        clienteRepository.updateNomeById(id, nome);
-
-        cliente = clienteRepository.findByNome(cliente.getNome()).get();
+        cliente = clienteRepository.save(cliente);
 
         return convertClienteToClienteDTO(cliente);
     }
